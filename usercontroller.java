@@ -1,8 +1,30 @@
-package com.example.demo.repository;
+package com.example.demo.controller;
 
 import com.example.demo.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.demo.repository.UserRepository;
+import org.springframework.web.bind.annotation.*;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {}
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "*")
+public class UserController {
+
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        return userRepository.save(user);
+    }
+}
+
